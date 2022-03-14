@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Socket Chat</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <main class="max-w-xl mx-auto w-full mt-16">
+        <div class="bg-gray-100 rounded-xl p-4">
+            <div class="mb-4 flex items-center gap-4 justify-betwen w-full">
+                <div class="w-full">
+                    <div id="nickname" class="text-xs font-medium text-black">
+
+                    </div>
+                </div>
+                <div class="shrink-0 text-xs text-gray-400">
+                    Онлайн: <span id="online">0</span>
+                </div>
+            </div>
+            <div id="chat" class="rounded-lg border p-4 bg-white mb-4 text-xs font overflow-y-auto" style="height: 30vh;">
+
+            </div>
+
+            <div class="flex flex-wrap gap-4 mb-4">
+                <button id="group1" class="focus:outline-none outline-none px-8 py-2 rounded-lg bg-white text-black border text-xs font-semibold">
+                    #кино
+                </button>
+                <button id="group2" class="focus:outline-none outline-none px-8 py-2 rounded-lg bg-white text-black border text-xs font-semibold">
+                    #мемасы
+                </button>
+            </div>
+            <div class="flex gap-4 items-center">
+                <input id="text" class="focus:outline-none outline-none p-2 rounded-lg bg-white border w-full text-sm" type="text" placeholder="Текст сообщения...">
+                <button id="send" class="focus:outline-none outline-none px-8 py-2 rounded-lg bg-blue-500 text-white text-sm font-semibold">
+                    Отправить
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('nickname').innerHTML = 'Анонимус#' + Math.round(Math.random() * (9999 - 1000) + 1000);
+
+        class Socket {
+            events = {};
+
+            constructor(ws) {
+                this.ws = ws;
+            }
+
+            on(name, handler) {
+                this.events[name] = handler;
+            }
+
+            send(name, data) {
+                this.ws.send(JSON.stringify({
+                    name: name,
+                    data: data || [],
+                }));
+            }
+
+            listen() {
+                this.ws.onopen = this.connected;
+                this.ws.onclose = this.disconnected;
+                this.ws.onerror = this.error;
+
+                ws.onmessage = response => {
+                    let event = JSON.parse(response.data);
+                    this.events[event.name](event);
+                }
+            }
+
+            close() {
+                this.ws.close();
+            }
+        }
+
+        const ws = new WebSocket('ws://localhost:2346');
+        const socket = new Socket(ws);
+
+        var currentGroup = null;
+
+        socket.connected = () => {
+            socket.send('user joined to chat', {
+                nickname: document.getElementById('nickname').innerHTML,
+            });
+        }
+
+        socket.disconnected = () => {
+            appendMessage('Отключен от сервера...');
+        }
+
+        socket.error = () => {
+            appendMessage('Не удалось подключиться к серверу...');
+        }
+
+        socket.on('new chat message', event => {
+            appendMessage(`${event.data.nickname}: ${event.data.text}`);
+        });
+
+        document.getElementById('send').onclick = () => {
+            let text = document.getElementById('text');
+
+            socket.send('new chat message', {
+                nickname: document.getElementById('nickname').innerHTML,
+                text: text.value,
+                group: currentGroup,
+            });
+
+            text.value = '';
+        }
+
+        document.getElementById('group1').onclick = () => {
+            socket.send('join group', {
+                group: 'group1',
+            });
+            document.getElementById('chat').innerHTML = '';
+
+            currentGroup = 'group1';
+        }
+
+        document.getElementById('group2').onclick = () => {
+            socket.send('join group', {
+                group: 'group2',
+            });
+            document.getElementById('chat').innerHTML = '';
+
+            currentGroup = 'group2';
+        }
+
+        socket.on('online', event => {
+            document.getElementById('online').innerHTML = event.data.count;
+        });
+
+        function appendMessage(text) {
+            var message = document.createElement("div");
+            message.innerHTML = text;
+            document.getElementById('chat').appendChild(message);
+        }
+
+        socket.listen();
+    </script>
+</body>
+
+</html>
