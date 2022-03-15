@@ -16,6 +16,7 @@ class Groups
 
     public function create(string $name, array $data = []): void
     {
+        $data['connections'] = $data['connections'] ?? [];
         $this->groups[$name] = $data;
     }
 
