@@ -14,6 +14,16 @@ class Groups
 
     }
 
+    public function create(string $name, array $data = []): void
+    {
+        $this->groups[$name] = $data;
+    }
+
+    public function delete(string $name): void
+    {
+        unset($this->groups[$name]);
+    }
+
     public function join(string $name, TcpConnection $connection): self
     {
         $this->groups[$name]['connections'] = $this->groups[$name]['connections'] ?? [];
