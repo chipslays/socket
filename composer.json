@@ -3,7 +3,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "workerman/workerman": "^4.0",
+        "workerman/workerman": "^4.0"
+    },
+    "require-dev": {
         "symfony/var-dumper": "^6.0"
     },
     "autoload": {

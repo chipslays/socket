@@ -85,7 +85,7 @@
         const ws = new WebSocket('ws://localhost:2346');
         const socket = new Socket(ws);
 
-        var currentGroup = null;
+        var currentGroup = 'default';
 
         socket.connected = () => {
             socket.send('user joined to chat', {

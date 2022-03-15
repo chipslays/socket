@@ -1,5 +1,16 @@
-<?php
+# PHP Web Socket
 
+Simple wrapper over Workerman.
+
+# Installastion
+
+```bash
+composer require chipslays/socket
+```
+
+# Usage
+
+```php
 use Socket\Worker;
 use Socket\Server;
 use Socket\Terminal;
@@ -75,3 +86,6 @@ $server->onStart(function (Worker $worker) use ($server) {
 });
 
 $server->start();
+```
+
+See `client` code in [examples](/examples) folder.

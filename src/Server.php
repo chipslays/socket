@@ -2,6 +2,7 @@
 
 namespace Socket;
 
+use Socket\Types\Connection;
 use Socket\Types\Event;
 use Workerman\Connection\TcpConnection;
 use Workerman\Timer;
@@ -25,17 +26,28 @@ class Server
 
     public function onConnected(callable $handler): void
     {
-        $this->getWorker()->onConnect = $handler;
+        $this->getWorker()->onConnect = function (TcpConnection $connection) use ($handler) {
+            $connection->groups = [];
+            // присоединяемся в дефолтную группу
+            $this->groups->join('default', $connection);
+            call_user_func_array($handler, [$connection]);
+        };
     }
 
     public function onDisconnected(callable $handler): void
     {
-        $this->getWorker()->onClose = $handler;
+        $this->getWorker()->onClose = function (TcpConnection $connection) use ($handler) {
+            // выходим из всех групп
+            $this->groups->leaveAll($connection);
+            call_user_func_array($handler, [$connection]);
+        };
     }
 
     public function onError(callable $handler): void
     {
-        $this->getWorker()->onError = $handler;
+        $this->getWorker()->onError = function (TcpConnection $connection, $code, $message) use ($handler) {
+            call_user_func_array($handler, [$connection, $code, $message]);
+        };
     }
 
     public function onStart(callable $handler): void
