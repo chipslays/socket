@@ -14,11 +14,13 @@ class Groups
 
     }
 
-    public function create(string $name, array $data = []): void
+    public function create(string $name, array $data = []): self
     {
         $data['id'] = $name;
         $data['connections'] = $data['connections'] ?? [];
         $this->groups[$name] = $data;
+
+        return $this;
     }
 
     public function delete(string $name): void
