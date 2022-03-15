@@ -45,9 +45,19 @@ class Groups
         return $this;
     }
 
-    public function get(string $name): Group
+    public function room(string $name): Group
     {
         return new Group($this->groups[$name] ?? []);
+    }
+
+    public function set(string $name, string $key, mixed $value): void
+    {
+        $this->groups[$name][$key] = $value;
+    }
+
+    public function get(string $name, string $key, mixed $default): mixed
+    {
+        return $this->groups[$name][$key] ?? $default;
     }
 
     /**
@@ -58,7 +68,7 @@ class Groups
      */
     public function to(string $name): Group
     {
-        return $this->get($name);
+        return $this->room($name);
     }
 
     public function all(): array
