@@ -29,6 +29,7 @@ class Groups
     {
         $this->groups[$name]['connections'] = $this->groups[$name]['connections'] ?? [];
         $this->groups[$name]['connections'][$connection->id] = $connection;
+        $this->groups[$name]['name'] = $name;
         $connection->groups[$name] = $name;
 
         return $this;
