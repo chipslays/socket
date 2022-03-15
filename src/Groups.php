@@ -60,7 +60,7 @@ class Groups
         return $this;
     }
 
-    public function room(string $name): Group
+    public function group(string $name): Group
     {
         return new Group($this->groups[$name] ?? []);
     }
