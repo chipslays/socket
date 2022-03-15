@@ -27,4 +27,9 @@ class Group
             $target->send(json_encode($event));
         }
     }
+
+    public function get(string $key, mixed $default = null): mixed
+    {
+        return $this->group[$key] ?? $default;
+    }
 }
