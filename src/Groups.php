@@ -16,7 +16,8 @@ class Groups
 
     public function join(string $name, TcpConnection $connection): self
     {
-        $this->groups[$name][$connection->id] = $connection;
+        $this->groups[$name]['connections'] = $this->groups[$name]['connections'] ?? [];
+        $this->groups[$name]['connections'][$connection->id] = $connection;
         $connection->groups[$name] = $name;
 
         return $this;
@@ -24,7 +25,7 @@ class Groups
 
     public function leave(string $name, TcpConnection $connection): self
     {
-        unset($this->groups[$name][$connection->id]);
+        unset($this->groups[$name]['connections'][$connection->id]);
         unset($connection->groups[$name]);
 
         return $this;
@@ -32,7 +33,7 @@ class Groups
 
     public function countBy(string $room): int
     {
-        return count($this->rooms[$room] ?? []);
+        return count($this->rooms[$room]['connections'] ?? []);
     }
 
     public function leaveAll(TcpConnection $connection): self
@@ -44,8 +45,30 @@ class Groups
         return $this;
     }
 
-    public function to(string $name): Group
+    public function get(string $name): Group
     {
         return new Group($this->groups[$name] ?? []);
+    }
+
+    /**
+     * Alias for `get` method.
+     *
+     * @param string $name
+     * @return Group
+     */
+    public function to(string $name): Group
+    {
+        return $this->get($name);
+    }
+
+    public function all(): array
+    {
+        $result = [];
+
+        foreach ($this->groups as $group) {
+            $result[] = new Group($group);
+        }
+
+        return $result;
     }
 }
