@@ -70,7 +70,7 @@ class Groups
         $this->groups[$name][$key] = $value;
     }
 
-    public function get(string $name, string $key, mixed $default): mixed
+    public function get(string $name, string $key, mixed $default = null): mixed
     {
         return $this->groups[$name][$key] ?? $default;
     }
