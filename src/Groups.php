@@ -46,9 +46,9 @@ class Groups
         return $this;
     }
 
-    public function countBy(string $room): int
+    public function countBy(string $name): int
     {
-        return count($this->rooms[$room]['connections'] ?? []);
+        return count($this->groups[$name]['connections'] ?? []);
     }
 
     public function leaveAll(TcpConnection $connection): self
@@ -83,7 +83,7 @@ class Groups
      */
     public function to(string $name): Group
     {
-        return $this->room($name);
+        return $this->group($name);
     }
 
     public function all(): array
