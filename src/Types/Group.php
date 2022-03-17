@@ -35,6 +35,6 @@ class Group
 
     public function __get($property): mixed
     {
-        return $this->event[$property] ?? null;
+        return $this->group[$property] ?? null;
     }
 }
