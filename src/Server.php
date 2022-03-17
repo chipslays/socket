@@ -29,7 +29,7 @@ class Server
         $this->getWorker()->onConnect = function (TcpConnection $connection) use ($handler) {
             $connection->groups = [];
             // присоединяемся в дефолтную группу
-            $this->groups->join('default', $connection);
+            // $this->groups->join('default', $connection);
             call_user_func_array($handler, [$connection]);
         };
     }
