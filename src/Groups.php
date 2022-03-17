@@ -28,6 +28,11 @@ class Groups
         unset($this->groups[$name]);
     }
 
+    public function exists(string $name): bool
+    {
+        return isset($this->groups[$name]);
+    }
+
     public function join(string $name, TcpConnection $connection): self
     {
         $this->groups[$name]['connections'] = $this->groups[$name]['connections'] ?? [];
