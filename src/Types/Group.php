@@ -32,4 +32,9 @@ class Group
     {
         return $this->group[$key] ?? $default;
     }
+
+    public function __get($property): mixed
+    {
+        return $this->event[$property] ?? null;
+    }
 }
