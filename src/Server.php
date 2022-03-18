@@ -6,6 +6,7 @@ use Socket\Types\Connection;
 use Socket\Types\Event;
 use Workerman\Connection\TcpConnection;
 use Workerman\Timer;
+use Workerman\Worker;
 
 class Server
 {
