@@ -83,6 +83,7 @@ class Groups
     public function update(Group $group): void
     {
         foreach ($group->toArray() as $key => $value) {
+            if (in_array($key, ['id', 'connections'])) continue;
             $this->set($group->id, $key, $value);
         }
     }
