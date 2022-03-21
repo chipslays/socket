@@ -2,7 +2,7 @@
 
 Simple wrapper over Workerman.
 
-# Installastion
+# Installation
 
 ```bash
 composer require chipslays/socket

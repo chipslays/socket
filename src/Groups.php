@@ -80,8 +80,16 @@ class Groups
         return $this->groups[$name][$key] ?? $default;
     }
 
+    public function update(Group $group): void
+    {
+        foreach ($group->toArray() as $key => $value) {
+            dump($key, $value);
+            // $this->set($group->id, $key, $value);
+        }
+    }
+
     /**
-     * Alias for `get` method.
+     * Alias for `group` method.
      *
      * @param string $name
      * @return Group
