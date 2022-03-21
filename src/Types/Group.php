@@ -33,8 +33,25 @@ class Group
         return $this->group[$key] ?? $default;
     }
 
-    public function __get($property): mixed
+    public function set(string $key, mixed $value): self
+    {
+        $this->group[$key] = $value;
+
+        return $this;
+    }
+
+    public function __get(mixed $property): mixed
     {
         return $this->group[$property] ?? null;
+    }
+
+    public function __set(mixed $property, mixed $value): void
+    {
+        $this->group[$property] = $value;
+    }
+
+    public function toArray(): array
+    {
+        return $this->group;
     }
 }
