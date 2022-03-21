@@ -83,8 +83,7 @@ class Groups
     public function update(Group $group): void
     {
         foreach ($group->toArray() as $key => $value) {
-            dump($key, $value);
-            // $this->set($group->id, $key, $value);
+            $this->set($group->id, $key, $value);
         }
     }
 
